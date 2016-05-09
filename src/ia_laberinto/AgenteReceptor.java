@@ -9,7 +9,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 /**
  *
- * @author chino
+ * @author Juan Lopez 2
  */
 public class AgenteReceptor extends Agent {
     
@@ -29,28 +29,7 @@ public class AgenteReceptor extends Agent {
                 }
             }            
         });
-    }
-    private int[] map(String a){
-        String[] arr = a.split(",");
-        int[] ret = new int[2];
-        switch(arr[0]){
-            case "izquierda":ret[0]=1;break;
-            case "derecha":ret[0]=2;break;                
-            case "recto":ret[0]=3;break;                
-            case "doble":ret[0]=4;break;                
-            case "izqRecto":ret[0]=5;break;                
-            case "derRecto":ret[0]=6;break;                
-            case "todos":ret[0]=7;break;                
-            case "tope":ret[0]=8;break;                
-        }
-        switch(arr[1]){
-            case "izquierda": ret[1]=1; break;
-            case "adelante": ret[1]=2; break;
-            case "derecha": ret[1]=3; break;
-            case "atras": ret[1]=4; break;
-        }        
-        return ret;
-    }
+    }    
 
     void enviar(String content,String destino) {
         ACLMessage msg=new ACLMessage();

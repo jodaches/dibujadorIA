@@ -14,7 +14,9 @@ import java.awt.Graphics;
  */
 public class Dibujador {
 
-    final int t = 15;
+    final int t = 20;
+    int restador=6;
+    int dimension=13;
 
     void dibujar(Graphics g, Punto p, int i, int a, int d, int ab, String direccion) {
         int x = p.getX();
@@ -45,7 +47,19 @@ public class Dibujador {
         if (ab == 2) {
             lineaAbajo(g, x, y);
         }        
-        
+        g.setColor(Color.cyan);
+        if (i == 3) {            
+            g.fillOval(x-t*2-restador, y-restador, dimension, dimension); 
+        }
+        if (a == 3) {            
+            g.fillOval(x-restador, y-t*2-restador, dimension, dimension);                            
+        }
+        if (d == 3) {            
+            g.fillOval(x+t*2-restador, y-restador, dimension, dimension);                            
+        }
+        if (ab == 3) {
+            g.fillOval(x-restador, y+t*2-restador, dimension, dimension);                            
+        }        
         
 
 //        switch(direccion){
@@ -74,19 +88,23 @@ public class Dibujador {
 
     private void lineaArriba(Graphics g, int x, int y) {        
         g.drawLine(x - t, y - t, x + t, y - t);
+        g.drawLine(x - t, y - t + 1 , x + t, y - t + 1);
     }
 
     private void lineaAbajo(Graphics g, int x, int y) {
         g.drawLine(x - t, y + t, x + t, y + t);
+        g.drawLine(x - t, y + t - 1 , x + t , y + t - 1);
     }
 
     private void lineaDerecha(Graphics g, int x, int y) {
         g.drawLine(x + t, y - t, x + t, y + t);
+        g.drawLine(x + t+1, y - t, x + t +1, y + t);
 
     }
 
     private void lineaIzquierda(Graphics g, int x, int y) {
         g.drawLine(x - t, y - t, x - t, y + t);
+        g.drawLine(x - t - 1, y - t, x - t - 1, y + t);
     }
 
 }

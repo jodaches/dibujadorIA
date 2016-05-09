@@ -5,9 +5,13 @@
  */
 package ia_laberinto;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 
 /**
  *
@@ -15,21 +19,27 @@ import java.util.ArrayList;
  */
 public class Principal extends javax.swing.JFrame {
     ArrayList<Punto> camino_actual = new ArrayList<Punto>();
-    Color Color_de_reversa=Color.lightGray;
+    Color Color_de_reversa=Color.GRAY;
+    Color ColorFondo=Color.BLACK;
+    Color ColorPared=Color.WHITE;
+    Color ColorMiRobot = Color.BLUE;
+    Color ColorRobotFeo = Color.CYAN;
     /**
      * Creates new form Principal
      */    
-    final int t=30;
+    final int t=40;
     Punto p= new Punto(400,400);        
     String direccion="ARRIBA";
     
-    Graphics g;
-    AgenteReceptor papi = null;
+    Graphics g;    
+    AgenteReceptor papi = null;    
     public Principal(AgenteReceptor a) {        
         initComponents();
-         g= jPanel1.getGraphics();
-         jPanel1.setBackground(Color.LIGHT_GRAY);
-         papi=a;         
+         g= jPanel1.getGraphics();         
+         jPanel1.setBackground(ColorFondo);
+         papi=a;     
+         jList1.setModel(new DefaultListModel());
+         
         /*jPanel1.setLayout(null);
         ImageIcon img = new ImageIcon(getClass().getResource("/img/triangulogoles.png"));
         Icon icono = new ImageIcon(img.getImage().getScaledInstance(5, 5, Image.SCALE_DEFAULT));
@@ -42,12 +52,22 @@ public class Principal extends javax.swing.JFrame {
     private Principal() {
          initComponents();
          g= jPanel1.getGraphics();
-         jPanel1.setBackground(Color.LIGHT_GRAY);
+         jPanel1.setBackground(ColorFondo);
+         jList1.setModel(new DefaultListModel());
     }
-        
+    int restador=6;
+    int dimension=13;
    
+    public void log_chat(String msg){//#chat,yo->hola || #chat, robotFeo-> pikachu
+        msg="#chat,"+msg;
+        String[] mensaje = msg.split(",");
+        DefaultListModel modelo = (DefaultListModel) this.jList1.getModel();        
+        modelo.add(0,mensaje[1]);                
+        
+    }
     
-    public void dibujar(String cadena){     
+    public void dibujar(String cadena){         
+        log_chat(cadena);
         if(cadena.contains("fracaso")){
             this.Color_de_reversa=Color.red;
             return;
@@ -62,31 +82,33 @@ public class Principal extends javax.swing.JFrame {
         }            
         String[] instruccion = cadena.split(",");        
         Dibujador d = new Dibujador();        
-        g.setColor(Color.black);
+        g.setColor(ColorPared);        
         d.dibujar(g, p,Integer.parseInt(instruccion[0]), Integer.parseInt(instruccion[1]),Integer.parseInt(instruccion[2]),Integer.parseInt(instruccion[3]),direccion);        
         direccion=instruccion[4];
-        g.setColor(Color_de_reversa);
-        g.drawOval(p.getX(), p.getY(), 5, 5);                                
-        g.setColor(Color.blue);
+        g.setColor(ColorFondo);
+        g.fillOval(p.getX()-restador, p.getY()-restador, dimension, dimension);                    
+        g.setColor(Color_de_reversa);        
+        g.drawOval(p.getX(), p.getY(), 5, 5);                    
+        g.setColor(ColorMiRobot);
         switch(direccion){
-            case "ARRIBA":                                
-                g.drawOval(p.getX(), p.getY()-t, 5, 5);                
+            case "ARRIBA":                                                
+                g.fillOval(p.getX()-restador, p.getY()-t-restador, dimension,dimension ); 
                 p.setXY(p.getX(), p.getY()-t);                
                 break;
-            case "ABAJO":
-                g.drawOval(p.getX(), p.getY()+t, 5, 5);
+            case "ABAJO":                
+                g.fillOval(p.getX()-restador, p.getY()+t-restador, dimension, dimension);
                 p.setXY(p.getX(), p.getY()+t);
                 break;
-            case "IZQUIERDA":
-                g.drawOval(p.getX()-t, p.getY(), 5, 5);
+            case "IZQUIERDA":                
+                g.fillOval(p.getX()-t-restador, p.getY()-restador, dimension, dimension);
                 p.setXY(p.getX()-t, p.getY());
                 break;
-            case "DERECHA":
-                g.drawOval(p.getX()+t, p.getY(), 5, 5);
+            case "DERECHA":                
+                g.fillOval(p.getX()+t-restador, p.getY()-restador, dimension, dimension);
                 p.setXY(p.getX()+t, p.getY());
                 break;
         }
-        g.setColor(Color.black);
+        g.setColor(ColorPared);
         
     }
     /**
@@ -109,18 +131,25 @@ public class Principal extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jButton11 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 788, Short.MAX_VALUE)
+            .addGap(0, 731, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 610, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jButton1.setText("izquierda");
@@ -186,12 +215,47 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jButton10.setText("jButton10");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)), "ChatBox"));
+
+        jScrollPane1.setViewportView(jList1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jButton11.setText("Inutil");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -204,15 +268,17 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButton9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton10)
+                    .addComponent(jButton11))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(107, 107, 107)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,13 +294,25 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton6)
-                .addGap(88, 88, 88)
+                .addGap(8, 8, 8)
+                .addComponent(jButton11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton10)
+                .addGap(18, 18, 18)
                 .addComponent(jButton7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton9)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 66, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         pack();
@@ -276,6 +354,14 @@ public class Principal extends javax.swing.JFrame {
         this.dibujar("fracaso");
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+       this.log_chat(this.jTextField1.getText());
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        papi.enviar("inutil", "main");
+    }//GEN-LAST:event_jButton11ActionPerformed
+
     /*
      * @param args the command line arguments
      */
@@ -291,6 +377,8 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -299,7 +387,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
     
